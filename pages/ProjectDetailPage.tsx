@@ -1,0 +1,247 @@
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { ExternalLinkIcon, ProblemIcon, SolutionIcon, CheckmarkIcon } from '../components/Icons'; 
+
+// Fix: Define a type for project details to make `liveUrl` an optional property, resolving TypeScript errors.
+type ProjectDetail = {
+  title: string;
+  category: string;
+  headerImage: string;
+  problem: string;
+  solution: string[];
+  technologies: string[];
+  outcomes: string[];
+  liveUrl?: string;
+};
+
+const projectDetails: Record<string, ProjectDetail> = {
+  'coach-iq': {
+    title: 'Coach IQ',
+    category: 'Product Management',
+    headerImage: 'https://images.unsplash.com/photo-1593341646782-e0b495cff86d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1260&h=750&q=80',
+    problem: 'Coaches are often evaluated through surface metrics like trophies or win ratios, which overlook tactical evolution, in-game adaptability, and development impact. There’s no structured or data-driven framework to benchmark coaching styles objectively.',
+    solution: [
+      'Introduced the Coach Intelligence Model (CIM)—a data framework and ML-driven scoring system to quantify coaching style.',
+      'Designed a composite "Coach IQ Score" to reflect tactical and behavioral intelligence.',
+      'Created a "Decision Timeline" feature to visually break down match events, substitutions, and outcomes.',
+      'Developed a "Cluster Explorer" for ML-based grouping of coaches with similar tactical patterns.',
+      'Conceptualized a "Coach Profile Dashboard" for personalized analytics and trend tracking.',
+    ],
+    technologies: ['Python', 'Streamlit', 'Power BI', 'Scikit-learn', 'Open Football APIs'],
+    outcomes: [
+      'Enables clubs to match coaching profiles with their playing philosophy using data.',
+      'Helps analysts identify emerging coaching talent based on objective metrics, not just reputation.',
+      'Lays the foundation for a global "Coach Data Index" to standardize coach evaluation.',
+    ],
+  },
+  'temsah-factory': {
+    title: 'Temsah Factory',
+    category: 'Product Management',
+    headerImage: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1260&h=750&q=80',
+    problem: 'Many clothing brands face difficulties expanding into footwear due to limited design–manufacturing integration. Outsourcing often results in mismatched aesthetics, inconsistent sizing, and lack of production control — limiting local fashion scalability.',
+    solution: [
+      'Designed the “Fashion-to-Footwear Extension Model (FFEM)” to align design, material selection, costing, and production.',
+      'Conducted Brand Alignment Workshops to define footwear tone, materials, and silhouette language per brand identity.',
+      'Developed initial SKUs for casual, semi-formal, and women’s lines.',
+      'Audited factory capabilities and adapted workflows for fashion-specific production batches.',
+      'Created price–volume costing models to balance brand margin expectations and factory efficiency.',
+    ],
+    technologies: ['Excel', 'Power BI', 'Adobe Illustrator', 'Market Benchmarking Models'],
+    outcomes: [
+      'Positioned Temsah Factory as a strategic footwear partner for apparel brands across Egypt and MENA.',
+      'Transformed a traditional shoe manufacturer into a brand-extension partner.',
+      'Created a replicable model for successful clothing–footwear co-branding partnerships.',
+    ],
+  },
+  'bigbasket-intelligence-app': {
+    title: 'BigBasket Intelligence App',
+    category: 'Retail Intelligence',
+    headerImage: 'https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1260&h=750&q=80',
+    problem: 'The retail market is fiercely competitive, and maintaining optimal pricing is crucial for profitability. Manually tracking competitor prices across thousands of SKUs is time-consuming, inefficient, and prone to errors. Our team needed an automated solution to identify significant pricing gaps and opportunities for margin improvement.',
+    solution: [
+      'Built a web application using Python and Streamlit for an interactive user experience.',
+      'Used Scikit-learn\'s KMeans clustering to intelligently group similar products for comparison.',
+      'Automated data scraping to gather up-to-date competitor pricing information.',
+      'Developed a dashboard that visually flags significant pricing discrepancies for quick action.',
+    ],
+    technologies: ['Python', 'Streamlit', 'Scikit-learn', 'Pandas', 'Beautiful Soup'],
+    outcomes: [
+      'Identified potential margin gains of up to 10% by highlighting underpriced products.',
+      'Reduced manual price-checking time by over 90%, freeing up the team for strategic tasks.',
+      'Provided a clear, data-driven foundation for pricing strategy discussions with leadership.',
+    ],
+    liveUrl: 'https://bigbasketapp.streamlit.app/',
+  },
+  'medicare-anomaly-detection': {
+    title: 'Medicare Anomaly Detection',
+    category: 'Data Analytics',
+    headerImage: 'https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1260&h=750&q=80',
+    problem: 'Fraud, waste, and abuse in healthcare billing cost billions annually. Traditional audits are reactive and can only sample a small fraction of claims, making it difficult to catch sophisticated fraud schemes. A proactive, data-driven approach was needed to identify suspicious patterns at scale without relying on pre-labeled fraud data.',
+    solution: [
+      'Developed an interactive dashboard in Streamlit to make complex data accessible to non-technical auditors.',
+      'Applied unsupervised learning models (DBSCAN and KMeans) to identify outliers in billing practices.',
+      'Enabled users to filter data by state and medical specialty to focus their investigations.',
+      'Visualized anomalies on scatter plots and provided a data table of high-risk providers for further review.',
+    ],
+    technologies: ['Python', 'Streamlit', 'Scikit-learn', 'DBSCAN', 'KMeans', 'Pandas', 'Plotly'],
+    outcomes: [
+      'Improved audit accuracy by 35% by focusing resources on data-backed, high-risk providers.',
+      'Provided an interactive tool for audit teams, empowering them to explore and investigate data independently.',
+      'Made complex machine learning outputs accessible and actionable for non-technical stakeholders.',
+    ],
+    liveUrl: 'https://medicareanomalydetection.streamlit.app/',
+  },
+  'warehouse-data-imputation': {
+    title: 'Warehouse Data Imputation',
+    category: 'Data Analytics',
+    headerImage: 'https://images.unsplash.com/photo-1565891741441-64926e441838?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1260&h=750&q=80',
+    problem: 'A critical warehouse dataset for supply chain optimization was incomplete, with up to 47.5% missing values in key columns like `wh_est_year`, `workers_num`, and `approved_wh_govt_certificate`. This missing data prevented reliable analysis and modeling, blocking further progress on the project.',
+    solution: [
+      'Developed a custom imputer class in Python to handle the complex, sequential imputation process.',
+      'Applied Random Forest models (Regressor and Classifier) to predict missing values with high accuracy.',
+      'Engineered new features like `infrastructure_maturity` and `workload_intensity` to capture underlying patterns and improve model performance.',
+      'Integrated business rules to ensure the imputed data was realistic and contextually valid (e.g., worker numbers constrained by warehouse capacity).',
+    ],
+    technologies: ['Python', 'Scikit-learn', 'Pandas', 'Random Forest', 'Feature Engineering', 'Data Visualization'],
+    outcomes: [
+      'Successfully filled all missing data points across a 25,000-record dataset, creating a complete and reliable source for analysis.',
+      'Preserved the original data distributions, ensuring that the imputation did not introduce bias.',
+      'Unlocked the dataset for use in subsequent supply chain optimization models, enabling data-driven decision-making.',
+    ],
+  },
+  'gender-pay-equity-power-bi': {
+    title: 'Data-Driven Insights on Gender Pay Equity with Power BI',
+    category: 'Data Analytics',
+    headerImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1260&h=750&q=80',
+    problem: 'Without data-driven analysis, identifying and addressing inequities in compensation structures is challenging. It is crucial to have a transparent, evidence-based approach to ensure fair pay, particularly regarding the gender pay gap, to foster a fair and transparent workplace.',
+    solution: [
+      'Designed DAX-powered calculations to measure salary medians, pay gaps, and experience-based trends.',
+      'Built interactive dashboards in Power BI for quick insights into pay equity and career progression.',
+      'Integrated real-time data updates using Microsoft Forms to ensure the analysis remains current and relevant.',
+    ],
+    technologies: ['Power BI', 'DAX', 'Microsoft Forms', 'HR Analytics'],
+    outcomes: [
+      'Transformed raw HR data into actionable insights, enabling data-driven conversations about compensation fairness.',
+      'Provided a clear visualization of the gender pay gap across different seniority levels and departments.',
+      'Equipped HR and leadership with a tool to monitor pay equity and drive meaningful change.',
+    ],
+  },
+};
+
+const ProjectDetailPage: React.FC = () => {
+  // Fix: Update useParams generic to work with the typed `projectDetails` object.
+  const { projectId } = useParams<{ projectId: string }>();
+  const project = projectId ? projectDetails[projectId] : undefined;
+
+  if (!project) {
+    return (
+      <div className="text-center py-20">
+        <h1 className="text-4xl font-bold text-navy mb-4">Project Not Found</h1>
+        <p className="text-lg text-gray-600 mb-8">The project you're looking for doesn't exist.</p>
+        <Link
+          to="/projects"
+          className="inline-block bg-soft-blue text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-blue-600 transition-colors duration-300"
+        >
+          Back to Projects
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="py-20 bg-light-bg animate-fade-in">
+      <div className="container mx-auto px-6">
+        <div className="max-w-4xl mx-auto mb-6">
+            <Link to="/projects" className="inline-flex items-center text-soft-blue font-semibold hover:text-navy transition-colors duration-300">
+                &larr; Back to All Projects
+            </Link>
+        </div>
+        <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+          <img src={project.headerImage} alt={project.title} className="w-full h-64 object-cover" />
+          <div className="p-8 md:p-12">
+            <span className="text-sm font-semibold text-soft-blue uppercase tracking-wider">{project.category}</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-navy mt-2 mb-10">{project.title}</h1>
+            
+            {project.liveUrl && (
+              <div className="mb-12">
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-soft-blue text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out"
+                >
+                  <ExternalLinkIcon className="w-5 h-5" />
+                  <span>View Live App</span>
+                </a>
+              </div>
+            )}
+            
+            <div className="space-y-12">
+              {/* Problem Section */}
+              <div className="bg-red-50/50 border border-red-100 rounded-lg p-6">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <ProblemIcon className="w-8 h-8 text-red-500" />
+                  </div>
+                  <div className="ml-4">
+                    <h2 className="text-2xl font-bold text-navy mb-2">The Problem</h2>
+                    <p className="text-gray-600 leading-relaxed">{project.problem}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Solution Section */}
+              <div className="bg-green-50/50 border border-green-100 rounded-lg p-6">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <SolutionIcon className="w-8 h-8 text-green-600" />
+                  </div>
+                  <div className="ml-4">
+                    <h2 className="text-2xl font-bold text-navy mb-4">The Solution</h2>
+                    <ul className="space-y-3">
+                      {project.solution.map((item, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckmarkIcon className="w-5 h-5 text-green-600 mr-3 mt-1 flex-shrink-0" />
+                          <span className="text-gray-700 leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <section>
+                <h2 className="text-2xl font-bold text-navy mb-4 border-b-2 border-gray-200 pb-2">Technologies Used</h2>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map(tech => (
+                    <span key={tech} className="bg-gray-200 text-gray-800 text-sm font-medium px-3 py-1 rounded-full">{tech}</span>
+                  ))}
+                </div>
+              </section>
+              
+              <section>
+                <h2 className="text-2xl font-bold text-navy mb-4 border-b-2 border-gray-200 pb-2">Outcomes & Impact</h2>
+                <ul className="list-disc list-inside space-y-3 text-gray-600 leading-loose">
+                  {project.outcomes.map((outcome, index) => (
+                    <li key={index}>{outcome}</li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+
+            <div className="mt-16 text-center border-t pt-8">
+              <Link
+                to="/projects"
+                className="inline-block text-soft-blue font-semibold hover:text-blue-600 transition-colors duration-300"
+              >
+                &larr; Back to All Projects
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectDetailPage;

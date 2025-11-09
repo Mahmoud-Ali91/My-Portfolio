@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  base: '/My-Portfolio/',
+export default defineConfig(({ command, mode }) => ({
+  base: mode === 'production' ? '/My-Portfolio/' : '/',
   plugins: [react()],
-})
+}))
